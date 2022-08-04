@@ -1,0 +1,54 @@
+package me.dio.vinicius.repolistingapp.data.di
+
+import android.util.Log
+import com.google.gson.GsonBuilder
+import me.dio.vinicius.repolistingapp.data.services.GithubService
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.core.context.loadKoinModules
+import org.koin.core.module.Module
+import org.koin.dsl.module
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+
+object DataModule {
+
+    private const val OK_HTTP = "OkHttp"
+
+    fun load() {
+        loadKoinModules(networkModules())
+    }
+
+    private fun networkModules(): Module {
+        return module {
+            single {
+                val insterceptor =  HttpLoggingInterceptor {
+                    Log.e(OK_HTTP, it)
+                }
+
+                insterceptor.level = HttpLoggingInterceptor.Level.BODY
+
+                OkHttpClient.Builder()
+                    .addInterceptor(insterceptor)
+                    .build()
+            }
+
+            single {
+                GsonConverterFactory.create(GsonBuilder().create())
+            }
+
+            single {
+                createService<GithubService>(get(), get())
+            }
+        }
+    }
+
+    private inline fun <reified T> createService(client: OkHttpClient, factory: GsonConverterFactory): T{
+        return Retrofit.Builder()
+            .baseUrl("https://api.github.com/")
+            .client(client)
+            .addConverterFactory(factory)
+            .build()
+            .create(T::class.java)
+    }
+}
