@@ -7,10 +7,14 @@ import android.view.Menu
 import android.widget.SearchView
 import me.dio.vinicius.repolistingapp.R
 import me.dio.vinicius.repolistingapp.databinding.ActivityMainBinding
+import me.dio.vinicius.repolistingapp.presentation.MainViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    private val viewModel by viewModel<MainViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
