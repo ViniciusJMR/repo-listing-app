@@ -7,7 +7,7 @@ data class Repo(
     val id: Long,
     val name: String,
     val owner: Owner,
-    @SerializedName("stargazer_count")
+    @SerializedName("stargazers_count")
     val stargazersCount: Long,
     val language: String,
     @SerializedName("html_url")
