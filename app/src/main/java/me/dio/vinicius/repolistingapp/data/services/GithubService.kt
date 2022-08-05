@@ -1,5 +1,6 @@
 package me.dio.vinicius.repolistingapp.data.services
 
+import me.dio.vinicius.repolistingapp.data.model.Repo
 import retrofit2.http.GET
 import retrofit2.http.Path
 

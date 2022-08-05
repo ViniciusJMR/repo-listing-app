@@ -2,6 +2,8 @@ package me.dio.vinicius.repolistingapp.data.di
 
 import android.util.Log
 import com.google.gson.GsonBuilder
+import me.dio.vinicius.repolistingapp.data.repositories.RepoRepository
+import me.dio.vinicius.repolistingapp.data.repositories.RepoRepositoryImpl
 import me.dio.vinicius.repolistingapp.data.services.GithubService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -16,7 +18,7 @@ object DataModule {
     private const val OK_HTTP = "OkHttp"
 
     fun load() {
-        loadKoinModules(networkModules())
+        loadKoinModules(networkModules() + repositoryModule())
     }
 
     private fun networkModules(): Module {
@@ -50,5 +52,11 @@ object DataModule {
             .addConverterFactory(factory)
             .build()
             .create(T::class.java)
+    }
+
+    private fun repositoryModule(): Module {
+        return module{
+            single<RepoRepository>{RepoRepositoryImpl(get())}
+        }
     }
 }
